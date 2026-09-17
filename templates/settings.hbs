@@ -1,0 +1,23 @@
+<section class="itags-settings-body">
+  <p>Каждый тег имеет постоянный ключ для автоматизаций. Название можно менять. Отключение сохраняет отметки на предметах, но выключает их в проверках модуля.</p>
+  {{#each rows}}
+  <fieldset class="itags-definition">
+    <legend>{{#if label}}{{label}}{{else}}Новый тег{{/if}}</legend>
+    <div class="itags-row">
+      <label>Ключ <input data-field="key" type="text" value="{{key}}" {{#if existing}}readonly{{/if}} placeholder="technological" required pattern="[a-z][a-z0-9_]{0,47}"></label>
+      <label>Название <input data-field="label" type="text" value="{{label}}" required maxlength="100"></label>
+      <label class="itags-check"><input data-field="enabled" type="checkbox" {{checked enabled}}> Включён</label>
+    </div>
+    <details><summary>Где доступен тег</summary>
+      <div class="itags-type-grid">
+        {{#each types}}<label><input type="checkbox" data-type="{{key}}" {{checked selected}}> {{label}}</label>{{/each}}
+        <label><input data-field="actors" type="checkbox" {{checked actors}}> Существа / персонажи</label>
+        <label><input data-field="effects" type="checkbox" {{checked effects}}> Активные эффекты</label>
+      </div>
+    </details>
+    {{#unless existing}}<button type="button" data-command="discard" data-index="{{index}}">Убрать новую строку</button>{{/unless}}
+  </fieldset>
+  {{/each}}
+  <button type="button" data-command="add"><i class="fa-solid fa-plus"></i> Добавить тег</button>
+</section>
+<footer class="form-footer"><button type="submit"><i class="fa-solid fa-save"></i> Сохранить теги</button></footer>

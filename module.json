@@ -1,0 +1,14 @@
+{
+  "id": "dnd5e-item-tags",
+  "title": "Item Tags for D&D5e",
+  "description": "Настраиваемые теги предметов, существ и эффектов. Свойства D&D5e, данные бросков и условия Midi-QOL.",
+  "version": "0.1.1",
+  "authors": [{ "name": "Kon4ka" }],
+  "compatibility": { "minimum": "14.359", "maximum": "14.999" },
+  "relationships": {
+    "systems": [{ "id": "dnd5e", "type": "system", "compatibility": { "minimum": "5.3.3", "maximum": "5.99" } }],
+    "requires": [{ "id": "lib-wrapper", "type": "module" }]
+  },
+  "esmodules": ["scripts/main.mjs"],
+  "styles": ["styles/tags.css"]
+}
