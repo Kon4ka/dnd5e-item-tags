@@ -92,17 +92,7 @@ export function renderSheet(app, element) {
   const root = element instanceof HTMLElement ? element : element?.[0];
   if (!root) return;
   root.querySelectorAll(".dnd5e-item-tags-panel, .dnd5e-item-tags-open").forEach(el => el.remove());
-  // Native Item sheet has a details tab. Other sheets can always use the header control.
-  if (doc.documentName === "Item") {
-    const details = root.querySelector('[data-tab="details"].tab');
-    if (details) {
-      const panel = buildTags(doc);
-      const properties = details.querySelector('[name="system.properties"], [name^="system.properties."]');
-      const group = properties?.closest(".form-group");
-      if (group) group.after(panel);
-      else details.append(panel);
-    }
-  }
+  // Items edit tags in their native property pool; the separate editor remains available.
   const header = root.querySelector(".sheet-header");
   // Actor tags belong in the window's three-dot menu, not the character banner.
   if (header && doc.documentName === "Item") {
