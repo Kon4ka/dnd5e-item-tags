@@ -14,6 +14,9 @@
 .dnd5e-item-tags-panel small { flex-basis: 100%; }
 @container (max-width: 430px) { .dnd5e-item-tags-panel .itags-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .dnd5e-item-tags-panel small { opacity: .75; }
+/* Keep native inputs in the form for property synchronization, but edit our tags once. */
+.dnd5e2 label:has(input[name="system.properties"][value^="itags_"]),
+.dnd5e2 label:has(input[name^="system.properties.itags_"]) { display: none; }
 .dnd5e-item-tags-open { flex: 0 0 auto; width: auto; align-self: center; margin: 4px; }
 .dnd5e-item-tags-settings .window-content { display: flex; flex-direction: column; gap: 12px; }
 .dnd5e-item-tags-settings .itags-settings-layout { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 12px; }
