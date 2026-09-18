@@ -2,7 +2,7 @@ import { ID } from "./model.mjs";
 import { api } from "./api.mjs";
 import { registerSettings } from "./settings.mjs";
 import { reconcileProperties, beforeUpdate, beforeCreate, registerRollData } from "./bridge.mjs";
-import { headerControls, renderSheet, refreshSheets, refreshDocumentDialogs, openTags } from "./ui.mjs";
+import { headerControls, refreshSheets, refreshDocumentDialogs, openTags } from "./ui.mjs";
 
 Hooks.once("init", () => {
   registerSettings(() => { reconcileProperties(); refreshSheets(); });
@@ -10,8 +10,8 @@ Hooks.once("init", () => {
   reconcileProperties();
   Hooks.on("preUpdateItem", beforeUpdate);
   Hooks.on("preCreateItem", beforeCreate);
+  // Sole entry point: the window three-dot menu. No button is injected into sheet headers.
   Hooks.on("getHeaderControlsApplicationV2", headerControls);
-  Hooks.on("renderApplicationV2", renderSheet);
   for (const name of ["updateItem", "updateActor", "updateActiveEffect", "createActiveEffect", "deleteActiveEffect"]) {
     Hooks.on(name, refreshDocumentDialogs);
   }

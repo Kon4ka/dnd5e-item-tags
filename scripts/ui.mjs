@@ -86,23 +86,6 @@ export function headerControls(app, controls) {
   controls.push({ action: "dnd5eItemTags", icon: "fa-solid fa-tags", label: "Теги",
     onClick: () => openTags(doc) });
 }
-export function renderSheet(app, element) {
-  const doc = app.document;
-  if (!visible(doc)) return;
-  const root = element instanceof HTMLElement ? element : element?.[0];
-  if (!root) return;
-  root.querySelectorAll(".dnd5e-item-tags-panel, .dnd5e-item-tags-open").forEach(el => el.remove());
-  // Items edit tags in their native property pool; the separate editor remains available.
-  const header = root.querySelector(".sheet-header");
-  // Actor tags belong in the window's three-dot menu, not the character banner.
-  if (header && doc.documentName === "Item") {
-    const button = document.createElement("button");
-    button.type = "button"; button.className = "dnd5e-item-tags-open";
-    button.textContent = "Теги";
-    button.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); openTags(doc); });
-    header.append(button);
-  }
-}
 export function refreshSheets() {
   for (const app of foundry.applications.instances.values()) {
     if (visible(app.document) || app instanceof DocumentTags) app.render({ force: false });
