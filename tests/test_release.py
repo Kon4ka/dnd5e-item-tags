@@ -42,7 +42,7 @@ class ReleaseTests(unittest.TestCase):
             git("tag", "v0.1.2")
             (root / "scripts/main.mjs").write_text("export const ready = false;")
             git("commit", "-am", "Fix <tags> [link] $(echo test)", "--quiet")
-            metadata = release.build(root, "Kon4ka/dnd5e-item-tags", 2)
+            metadata = release.build(root, "Kon4ka/dnd5e-item-tags", 2, sha=git("rev-parse", "HEAD"))
             self.assertEqual(metadata["tag"], "v0.1.3")
             self.assertEqual(json.loads((root / "module.json").read_text()), source)
             with zipfile.ZipFile(root / "dist/dnd5e-item-tags.zip") as archive:
