@@ -104,7 +104,8 @@ export function renderSheet(app, element) {
     }
   }
   const header = root.querySelector(".sheet-header");
-  if (header) {
+  // Actor tags belong in the window's three-dot menu, not the character banner.
+  if (header && doc.documentName === "Item") {
     const button = document.createElement("button");
     button.type = "button"; button.className = "dnd5e-item-tags-open";
     button.textContent = "Теги";
