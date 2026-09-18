@@ -1,5 +1,6 @@
 import { applicable, rawTag, flagPath, ID } from "./model.mjs";
 import { definitions, enabled, canEdit, has, set } from "./api.mjs";
+import { openSettings } from "./settings.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 export class DocumentTags extends HandlebarsApplicationMixin(ApplicationV2) {
@@ -16,11 +17,27 @@ export class DocumentTags extends HandlebarsApplicationMixin(ApplicationV2) {
 export const openTags = doc => new DocumentTags(doc).render({ force: true });
 
 function buildTags(doc) {
-  const block = document.createElement("fieldset");
-  block.className = "dnd5e-item-tags-panel";
-  const legend = document.createElement("legend");
-  legend.textContent = "Теги";
-  block.append(legend);
+  const block = document.createElement("div");
+  block.className = "dnd5e-item-tags-panel form-group stacked checkbox-grid";
+  const heading = document.createElement("div");
+  heading.className = "itags-heading";
+  const titleLabel = document.createElement("span");
+  titleLabel.textContent = "Теги";
+  heading.append(titleLabel);
+  if (game.user.isGM) {
+    const configure = document.createElement("button");
+    configure.type = "button";
+    configure.className = "itags-configure";
+    configure.textContent = "Настроить теги";
+    configure.addEventListener("click", event => {
+      event.preventDefault(); event.stopPropagation(); openSettings();
+    });
+    heading.append(configure);
+  }
+  block.append(heading);
+  const grid = document.createElement("div");
+  grid.className = "itags-grid";
+  block.append(grid);
   const defs = definitions().filter(d => d.enabled && applicable(doc, d));
   if (!enabled() || !defs.length) {
     const message = document.createElement("p");
@@ -29,7 +46,7 @@ function buildTags(doc) {
   }
   for (const def of defs) {
     const label = document.createElement("label");
-    label.className = "itags-pill";
+    label.className = "itags-checkbox checkbox";
     const input = document.createElement("input");
     input.type = "checkbox";
     input.checked = rawTag(doc, def.key, { source: true });
@@ -52,7 +69,7 @@ function buildTags(doc) {
       catch (error) { input.checked = !requested; ui.notifications.error(error.message); }
       finally { input.disabled = !canEdit(doc); }
     });
-    block.append(label);
+    grid.append(label);
   }
   // No named inputs: parent sheet submission must not persist temporary effect values.
   block.addEventListener("change", e => e.stopPropagation());
@@ -78,7 +95,13 @@ export function renderSheet(app, element) {
   // Native Item sheet has a details tab. Other sheets can always use the header control.
   if (doc.documentName === "Item") {
     const details = root.querySelector('[data-tab="details"].tab');
-    if (details) details.prepend(buildTags(doc));
+    if (details) {
+      const panel = buildTags(doc);
+      const properties = details.querySelector('[name="system.properties"], [name^="system.properties."]');
+      const group = properties?.closest(".form-group");
+      if (group) group.after(panel);
+      else details.append(panel);
+    }
   }
   const header = root.querySelector(".sheet-header");
   if (header) {

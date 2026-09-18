@@ -65,6 +65,12 @@ export class TagSettings extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 }
 
+export function openSettings() {
+  if (!game.user.isGM) return;
+  const existing = foundry.applications.instances.get("dnd5e-item-tag-settings");
+  return (existing ?? new TagSettings()).render({ force: true });
+}
+
 export function registerSettings(refresh) {
   // Reuse saved world settings from the unpublished first name when present.
   const previous = (key, fallback) => {
@@ -78,7 +84,7 @@ export function registerSettings(refresh) {
   catch { initialDefinitions = structuredClone(DEFAULTS); }
   game.settings.register(ID, "definitions", { scope: "world", config: false, type: Array,
     default: initialDefinitions, onChange: refresh });
-  game.settings.registerMenu(ID, "configure", { name: "Теги предметов, существ и эффектов",
+  game.settings.registerMenu(ID, "configure", { name: "Item Tags — Теги предметов, существ и эффектов",
     label: "Настроить теги", hint: "Добавить тег, изменить название, включить или отключить и выбрать типы документов.",
     icon: "fa-solid fa-tags", type: TagSettings, restricted: true });
   game.settings.register(ID, "enabled", { name: "Включить теги", hint: "При выключении проверки тегов возвращают 0; сохранённые отметки остаются.",
